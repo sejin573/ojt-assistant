@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="업무 메모를 데일리 OJT 형식으로 정리하고 노션에 옮기는 로컬 도우미" />
+    <title>OJT 작성 도우미</title>
+    <script>
+      if (new URLSearchParams(window.location.search).get("compact") === "1") {
+        document.documentElement.classList.add("compact-mode");
+      }
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="brand-mark" aria-hidden="true">OJT</div>
+            <div>
+              <h1>OJT 작성 도우미</h1>
+              <p>업무 메모를 일지 형식으로 정리합니다</p>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <span id="modeBadge" class="mode-badge"><span class="status-dot"></span>확인 중</span>
+            <button id="compactModeButton" class="button small secondary" type="button">미니 프로그램</button>
+            <button id="settingsButton" class="button small secondary" type="button">설정</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-container">
+        <section class="context-bar" aria-label="작성 기준">
+          <div class="date-controls">
+            <span class="context-label">작성일</span>
+            <button class="date-shortcut" data-date="yesterday" type="button">어제</button>
+            <button class="date-shortcut" data-date="today" type="button">오늘</button>
+            <input id="entryDate" type="date" aria-label="OJT 작성 날짜" />
+          </div>
+          <div class="stage-info">
+            <span id="weekLabel">OJT 1주차</span>
+            <strong id="stageLabel">IT 기초 파악</strong>
+          </div>
+        </section>
+
+        <section class="workspace-grid">
+          <article class="panel input-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-number">1</span>
+                <h2>오늘의 업무 후보</h2>
+              </div>
+              <button id="clearButton" class="text-button" type="button">비우기</button>
+            </div>
+
+            <div class="monitor-card">
+              <div>
+                <span id="monitorDot" class="monitor-dot"></span>
+                <div>
+                  <strong id="monitorLabel">모니터링 상태 확인 중</strong>
+                  <p id="monitorDetail">활성 프로그램과 사용 시간을 암호화해 로컬에 기록합니다.</p>
+                </div>
+              </div>
+              <button id="toggleMonitorButton" class="button small secondary" type="button">일시정지</button>
+            </div>
+
+            <div class="topics-actions">
+              <button id="loadTopicsButton" class="button secondary load-topics-button" type="button">
+                <span>모니터링 내역 정리</span>
+                <span aria-hidden="true">↻</span>
+              </button>
+              <button id="refreshTopicsButton" class="button small secondary" type="button" title="저장된 정리 결과를 버리고 처음부터 다시 정리합니다">다시 정리</button>
+            </div>
+
+            <div id="topicList" class="topic-list">
+              <div class="topic-empty">기록이 쌓이면 업무 후보가 여기에 표시됩니다.</div>
+            </div>
+
+            <div class="selection-summary">
+              <span>OJT에 포함할 항목을 선택하세요.</span>
+              <strong id="selectedCount">0개 선택</strong>
+            </div>
+
+            <label class="field-label manual-label" for="workMemo">추가 메모 <span>선택</span></label>
+            <textarea id="workMemo" class="manual-input" placeholder="모니터링에 잡히지 않은 업무가 있다면 여기에 적으세요."></textarea>
+            <div class="helper-row">
+              <span>선택한 업무 후보와 이 메모만 OJT에 반영됩니다.</span>
+              <span id="workCount">0자</span>
+            </div>
+
+            <button id="generateButton" class="button primary generate-button" type="button">
+              <span id="generateButtonText">OJT 초안 생성</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </article>
+
+          <article class="panel output-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-number">2</span>
+                <h2>작성 결과</h2>
+              </div>
+              <span id="draftStatus" class="draft-status">작성 전</span>
+            </div>
+
+            <div id="emptyState" class="empty-state">
+              <div class="empty-icon" aria-hidden="true">✓</div>
+              <strong>수행한 업무를 입력해주세요</strong>
+              <p>왼쪽의 한 칸만 작성하면 OJT 항목을 자동으로 정리합니다.</p>
+            </div>
+
+            <div id="draftEditor" class="draft-editor hidden">
+              <label class="output-field">
+                <span>수행한 업무</span>
+                <textarea id="performedTasks"></textarea>
+                <button class="field-copy" data-copy="performed" type="button">복사</button>
+              </label>
+              <label class="output-field">
+                <span>이슈·어려운 점</span>
+                <textarea id="issues"></textarea>
+                <button class="field-copy" data-copy="issues" type="button">복사</button>
+              </label>
+              <label class="output-field">
+                <span>기타·건의 및 학습 내용</span>
+                <textarea id="reflection"></textarea>
+                <button class="field-copy" data-copy="reflection" type="button">복사</button>
+              </label>
+              <div class="refine-row">
+                <button id="refineButton" class="text-button" type="button">학습 내용 AI로 다듬기</button>
+              </div>
+
+              <div class="competency-box">
+                <span>연결된 OJT 역량</span>
+                <div id="competencyTags" class="competency-tags"></div>
+              </div>
+
+              <div class="result-actions">
+                <button id="saveButton" class="button secondary" type="button">기록 저장</button>
+                <button id="copyRowButton" class="button primary" type="button">노션용 한 행 복사</button>
+                <button id="openNotionButton" class="button secondary" type="button">노션 열기 ↗</button>
+              </div>
+              <p class="local-note">저장 기록은 이 노트북의 로컬 데이터베이스에 암호화되어 보관됩니다.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="history-section">
+          <div class="history-heading">
+            <div>
+              <h2>최근 작성 기록</h2>
+              <span>이번 주 <b id="weeklyCount">0일</b></span>
+            </div>
+            <button id="exportButton" class="text-button" type="button">백업 내려받기</button>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="settingsDialog" class="settings-dialog">
+      <form method="dialog">
+        <div class="dialog-heading">
+          <h2>기본 설정</h2>
+          <button class="dialog-close" value="cancel" aria-label="닫기">×</button>
+        </div>
+        <label class="settings-field">
+          <span>OJT 시작일</span>
+          <input id="ojtStartDate" type="date" />
+        </label>
+        <label class="settings-field">
+          <span>노션 OJT 주소</span>
+          <input id="notionUrl" type="url" />
+        </label>
+        <div class="settings-info">
+          <strong>AI 작성 모드</strong>
+          <p id="aiSettingsMessage">연결 상태를 확인하고 있습니다.</p>
+          <small>로컬 AI를 우선 사용하며 회사 계정과 비밀번호는 저장하지 않습니다.</small>
+        </div>
+        <menu>
+          <button class="button secondary" value="cancel">취소</button>
+          <button id="saveSettingsButton" class="button primary" value="default">설정 저장</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
