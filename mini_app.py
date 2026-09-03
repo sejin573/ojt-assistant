@@ -1,3 +1,10 @@
+"""CustomTkinter 기반 OJT 미니 창.
+
+네이티브 창은 활동 데이터를 직접 읽지 않고 ``server.py``의 로컬 HTTP API만 사용한다.
+후보 선택·인라인 편집·초안 생성과 함께 항상 위, 투명도, 단일 인스턴스 같은 Windows 창
+상태를 관리한다. 서버 계약이나 후보 필드를 변경하면 브라우저 클라이언트와 함께 검증한다.
+"""
+
 from __future__ import annotations
 
 import ctypes
