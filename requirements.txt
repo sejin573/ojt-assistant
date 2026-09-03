@@ -1,3 +1,4 @@
+# Windows UI Automation, 전역 마우스 이벤트, 네이티브 미니 창에 필요한 직접 의존성.
 uiautomation==2.0.29
 pynput==1.8.2
 customtkinter==6.0.0
