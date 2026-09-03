@@ -1,5 +1,10 @@
+# 선택적 외부 AI 설정과 비밀키
 .env
+
+# Python 실행 캐시
 __pycache__/
 *.pyc
+
+# 암호화된 활동 DB·작성 기록과 로컬 전용 보조 파일
 data/
 vendor/
