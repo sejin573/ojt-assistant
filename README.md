@@ -170,3 +170,6 @@ Ollama와 `qwen3:4b-instruct` 모델이 설치되어 있으면 앱이 자동으�
 | `launch-mini.vbs` | 콘솔 없이 미니 창을 띄우는 실행기 |
 | `install-mini-shortcut.vbs` | 바탕화면 바로가기 생성 |
 | `data/` | 암호화된 활동·작성 기록 (저장소 제외) |
+
+더 자세한 모듈 경계, 데이터 흐름, 파일별 수정 지점은
+[`docs/FILE_GUIDE.md`](docs/FILE_GUIDE.md)에 정리되어 있습니다.
