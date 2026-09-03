@@ -1,3 +1,10 @@
+"""OJT 미니 창을 안정적으로 시작하기 위한 Windows 실행 보조 모듈.
+
+로컬 서버의 준비 상태를 확인해 필요하면 백그라운드로 기동하고, 실행 중인 브라우저와 현재
+마우스가 위치한 모니터를 조사해 미니 창의 초기 좌표를 계산한다. 실제 UI와 API 처리는
+``mini_app.py``와 ``server.py``가 담당한다.
+"""
+
 from __future__ import annotations
 
 import ctypes
