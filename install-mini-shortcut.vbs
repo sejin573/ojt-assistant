@@ -1,5 +1,8 @@
 Option Explicit
 
+' 현재 저장소 위치를 기준으로 바탕화면 바로가기를 만든다.
+' 바로가기는 이 스크립트가 아니라 launch-mini.vbs를 호출해 콘솔 없는 실행 경로를 유지한다.
+
 Dim shell, files, root, desktop, shortcut, pythonw, shortcutName
 Set shell = CreateObject("WScript.Shell")
 Set files = CreateObject("Scripting.FileSystemObject")
