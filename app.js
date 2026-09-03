@@ -1,3 +1,11 @@
+/*
+ * 전체 브라우저 화면의 상태·이벤트 조정기.
+ *
+ * 서버가 보유하는 활동 후보와 OJT 기록을 /api 엔드포인트로 읽고 쓰며, 현재 폼 선택과
+ * 로딩·토스트 같은 일시 상태만 브라우저에서 관리한다. index.html의 고정 ID와 이 파일의
+ * getElementById 참조는 하나의 계약이므로 함께 변경한다. 데이터 흐름은 docs/FILE_GUIDE.md 참고.
+ */
+
 const DEFAULT_NOTION_URL = "https://app.notion.com/p/sungbaeson/3b90d6651bb680a59147ec5ecd56cb98";
 const ENTRY_KEY = "ojt-assistant-entries-v1";
 const MIGRATION_KEY = "ojt-assistant-entries-migrated-v1";
